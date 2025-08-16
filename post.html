@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TechForUs — Yazı</title>
+  <meta name="color-scheme" content="light dark"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/"><div class="logo" aria-hidden="true"></div><strong>TechForUs</strong></a>
+      <nav>
+        <a href="/">Anasayfa</a>
+        <a href="/admin/">Yazar Girişi</a>
+      </nav>
+    </header>
+
+    <div class="breadcrumbs"><a href="/">&larr; Tüm yazılar</a></div>
+
+    <article class="post-body">
+      <h1 id="title" class="post-title"></h1>
+      <div id="meta" class="meta"></div>
+      <div id="content"></div>
+    </article>
+
+    <footer>© <span id="y"></span> TechForUs</footer>
+  </div>
+
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+const params = new URLSearchParams(location.search);
+const slug = params.get('slug');
+
+async function loadPost(){
+  if(!slug){ document.getElementById('content').textContent = 'Yazı bulunamadı.'; return; }
+  const idx = await (await fetch('/content/posts_index.json', {cache:'no-store'})).json();
+  const meta = (idx.posts||[]).find(p=>p.slug===slug);
+  if(!meta){ document.getElementById('content').textContent = 'Yazı bulunamadı.'; return; }
+  document.title = meta.title + ' — TechForUs';
+  document.getElementById('title').textContent = meta.title;
+  document.getElementById('meta').textContent = new Date(meta.date).toLocaleDateString('tr-TR') + (meta.author?(' · '+meta.author):'');
+
+  const md = await (await fetch('/content/posts/'+encodeURIComponent(slug)+'.md', {cache:'no-store'})).text();
+  document.getElementById('content').innerHTML = marked.parse(md);
+}
+loadPost();
+</script>
+</body>
+</html>
