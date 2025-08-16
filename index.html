@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TechForUs — Basit ve Hızlı Teknoloji Günlüğü</title>
+  <meta name="description" content="Teknoloji notları, kılavuzlar ve mini incelemeler için hafif bir blog şablonu." />
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="TechForUs — Basit ve Hızlı Teknoloji Günlüğü" />
+  <meta property="og:description" content="Teknoloji notları, kılavuzlar ve mini incelemeler için hafif bir blog şablonu." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://example.com/" />
+  <meta property="og:image" content="/cover.png" />
+  <link rel="alternate" type="application/rss+xml" title="TechForUs RSS" href="/rss.xml"/>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --card: #111218;
+      --fg: #e6e6e6;
+      --muted: #9aa0a6;
+      --accent: #7c5cff;
+      --accent-2: #00d1b2;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    @media (prefers-color-scheme: light) {
+      :root { --bg: #f7f7fb; --card: #ffffff; --fg: #1d1e22; --muted: #5f6368; }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--fg); background: radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,.15), transparent 40%), var(--bg);
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top: 8px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--fg); }
+    .logo {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+    nav a { color:var(--muted); text-decoration:none; margin-left:14px; font-weight:600; }
+    nav a:hover { color: var(--fg); }
+
+    .hero { margin: 48px 0 24px; padding: 28px; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 44px); letter-spacing: -0.02em; }
+    .hero p { margin: 0; color: var(--muted); }
+
+    .posts { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+    .card { background: var(--card); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); display:flex; flex-direction:column; }
+    .card h3 { margin: 4px 0 8px; font-size: 20px; }
+    .card .meta { color: var(--muted); font-size: 12px; }
+    .card a.btn { margin-top: auto; display:inline-block; text-decoration:none; font-weight:700; padding:10px 12px; border-radius:12px; background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:white; text-align:center; }
+
+    footer { margin: 36px 0 12px; color: var(--muted); text-align:center; font-size: 14px; }
+    .search { margin: 18px 0 24px; display:flex; gap:10px; }
+    .search input { flex:1; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background: var(--card); color: var(--fg); }
+    .tag { display:inline-block; padding:4px 10px; border-radius:999px; background: rgba(124,92,255,.15); color: #cfc6ff; font-size: 12px; margin-right: 8px; }
+    @media (prefers-color-scheme: light) { .tag { background: rgba(124,92,255,.12); color: #6a57ff; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/">
+        <div class="logo" aria-hidden="true"></div>
+        <strong>TechForUs</strong>
+      </a>
+      <nav>
+        <a href="#yazilar">Yazılar</a>
+        <a href="#hakkinda">Hakkında</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>Basit, hızlı ve tek dosyalık bir teknoloji blogu.</h1>
+      <p>CLI kurulumu olmadan GitHub ve Cloudflare Pages ile saniyeler içinde yayına çık.</p>
+      <div class="search">
+        <input id="q" placeholder="Ara: Kubernetes, Docker, Windows, Azure…"/>
+      </div>
+      <div id="tags"></div>
+    </section>
+
+    <section id="yazilar" class="posts"></section>
+
+    <section id="hakkinda" class="hero" style="margin-top:24px">
+      <h2>Hakkında</h2>
+      <p>Bu şablon; kişisel notlar, kısa kılavuzlar ve link paylaşımları için optimize edildi. Tek HTML dosyası, hafif CSS ve minik bir JS ile gelir.</p>
+    </section>
+
+    <section id="iletisim" class="hero" style="margin-top:24px">
+      <h2>İletişim</h2>
+      <p>e‑posta: <a href="mailto:you@example.com">you@example.com</a> · X/Twitter: <a href="https://x.com/yourhandle" target="_blank" rel="noopener">@yourhandle</a></p>
+    </section>
+
+    <footer>© <span id="y"></span> TechForUs · <a href="/rss.xml">RSS</a></footer>
+  </div>
+
+  <script>
+    const POSTS = [
+      { title: "Kubernetes 1.31 yükseltme notları", date: "2025-08-10", tags: ["kubernetes","aks"], url: "#", intro: "Node-by-node strateji, kesinti riskleri ve pratik ipuçları." },
+      { title: "Windows Server'da yüksek CPU avı", date: "2025-08-05", tags: ["windows","performance"], url: "#", intro: "Hangi sayaçlara bakmalı, hangi logları toplamlıyız?" },
+      { title: "Cloudflare Pages ile tek tık deploy", date: "2025-08-01", tags: ["cloudflare","devops"], url: "#", intro: "GitHub repo bağla, özel alan adını yönlendir, bitti." },
+      { title: "Docker'da sertifika yükleme notları", date: "2025-07-29", tags: ["docker","tls"], url: "#", intro: "/usr/local/share/ca-certificates ve update-ca-certificates akışı." }
+    ];
+
+    const $list = document.querySelector('.posts');
+    const $q = document.getElementById('q');
+    const $tags = document.getElementById('tags');
+    const $year = document.getElementById('y');
+    $year.textContent = new Date().getFullYear();
+
+    const allTags = [...new Set(POSTS.flatMap(p => p.tags))];
+    allTags.forEach(t => {
+      const s = document.createElement('span'); s.className = 'tag'; s.textContent = `#${t}`; s.onclick = () => filter(t);
+      $tags.appendChild(s);
+    });
+
+    function render(items) {
+      $list.innerHTML = '';
+      items.forEach(p => {
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <div class="meta">${new Date(p.date).toLocaleDateString('tr-TR')} · ${p.tags.map(t=>`#${t}`).join(' ')}</div>
+          <h3>${p.title}</h3>
+          <p>${p.intro}</p>
+          <a class="btn" href="${p.url}">Oku</a>
+        `;
+        $list.appendChild(el);
+      });
+    }
+
+    function filter(q) {
+      const needle = (q || '').toLowerCase().trim();
+      const filtered = POSTS.filter(p =>
+        [p.title, p.intro, ...(p.tags||[])].join(' ').toLowerCase().includes(needle)
+      );
+      render(filtered);
+    }
+
+    $q.addEventListener('input', e => filter(e.target.value));
+    render(POSTS);
+  </script>
+</body>
+</html>
